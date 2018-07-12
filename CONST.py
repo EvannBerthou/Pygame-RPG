@@ -19,8 +19,16 @@ DIRT = "Graphics/dirt.jpg"
 STONE = "Graphics/stone.jpg"
 WOOD = "Graphics/wood.jpg"
 SKY = "Graphics/sky.png"
-PLAYER = "Graphics/player.png"
+PLAYER_LEFT = "Graphics/player_left.png"
+PLAYER_RIGHT = "Graphics/player_right.png"
 
 
 #PLAYER
 PlayerSpeed = .1
+
+def Clamp(value, min, max):
+    if value > max:
+        value = max
+    if value < min:
+        value = min
+    return value

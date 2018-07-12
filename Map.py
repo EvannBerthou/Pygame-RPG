@@ -4,8 +4,13 @@ from PIL import Image
 
 pygame.init()
 
-class Map:
+class Pix:
+    def __init__(self,x,y,TILE):
+        self.x = x * TILE_SIZE
+        self.y = y * TILE_SIZE
+        self.tile = TILE
 
+class Map:
     def LoadTexture(file):
         bitmap = pygame.image.load(file)
         bitmap = pygame.transform.scale(bitmap, (TILE_SIZE, TILE_SIZE))
@@ -16,11 +21,10 @@ class Map:
     Dirt = LoadTexture(DIRT)
     Stone = LoadTexture(STONE)
     Wood = LoadTexture(WOOD)
-    Player = LoadTexture(PLAYER)
+    Player_left = LoadTexture(PLAYER_LEFT)
+    Player_right = LoadTexture(PLAYER_RIGHT)
 
-    def GetTileFromColor(Color):
-        TILES = dict([(COLOR_RED, Map.Dirt),(COLOR_BLUE,Map.Wood), (COLOR_GREEN, Map.Stone)])
-        return TILES[Color]
+    TILES = dict([(COLOR_RED, Dirt),(COLOR_BLUE,Wood), (COLOR_GREEN, Stone)])
 
     def DrawTile(self,x,y,Tile):
         self.window.blit(Tile, (x,y))
@@ -28,14 +32,20 @@ class Map:
 
     def GetMap(self):
         map = Image.open("Graphics/Map.png")
-        return map.load(), map.size
+        pix = map.load()
+        Tiles = []
+        for x in range(map.size[0]):
+            for y in range(map.size[1]):
+                if pix[x,y][3] is not 0:
+                    Tiles.append(Pix(x,y, Map.TILES[pix[x,y]]))
+
+        return Tiles, map.size
 
     def draw(self, PlayerX,PlayerY):
-        for x in range(self.mapSize[0]):
-            for y in range(self.mapSize[1]):
-                if self.pix[x,y][3] is not 0:
-                    self.DrawTile(x * TILE_SIZE - PlayerX, y * TILE_SIZE + PlayerY, Map.GetTileFromColor(self.pix[x,y]))
+        for tile in self.pix:
+            self.DrawTile(tile.x - PlayerX,tile.y,tile.tile)
 
     def __init__(self, window):
         self.window = window
-        self.pix, self.mapSize = self.GetMap()
+        self.pix,self.mapSize = self.GetMap()
+        self.draw(0,0)

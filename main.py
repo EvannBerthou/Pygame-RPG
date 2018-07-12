@@ -5,8 +5,6 @@ import Map, Player
 
 def show_fps():
     fps = int(clock.get_fps())
-    if fps > 60:
-        fps = 60
     fpsText = fps_font.render(str(fps), True, COLOR_GREEN)
     window.blit(fpsText,(0,0))
 
@@ -23,12 +21,12 @@ clock =  pygame.time.Clock()
 fps_font = pygame.font.SysFont("Arial", 20)
 
 map = Map.Map(window)
-player = Player.Player(window, -100, map.Player)
+player = Player.Player(window)
 
 pygame.display.update()
 
 while True:
-    deltaTime = clock.tick(63)
+    deltaTime = clock.tick()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
