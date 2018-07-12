@@ -2,21 +2,40 @@ import pygame
 from CONST import *
 from PIL import Image
 
+pygame.init()
+
 class Map:
-    def DrawTile(self,x,y,TILE):
-        tile = pygame.image.load(TILE)
-        tile = pygame.transform.scale(tile, (TILE_SIZE, TILE_SIZE))
-        self.window.blit(tile,(x,y))
+
+    def LoadTexture(file):
+        bitmap = pygame.image.load(file)
+        bitmap = pygame.transform.scale(bitmap, (TILE_SIZE, TILE_SIZE))
+        surface = pygame.Surface((TILE_SIZE,TILE_SIZE), pygame.HWSURFACE | pygame.SRCALPHA)
+        surface.blit(bitmap,(0,0))
+        return surface
+
+    Dirt = LoadTexture(DIRT)
+    Stone = LoadTexture(STONE)
+    Wood = LoadTexture(WOOD)
+    Player = LoadTexture(PLAYER)
+
+    def GetTileFromColor(Color):
+        TILES = dict([(COLOR_RED, Map.Dirt),(COLOR_BLUE,Map.Wood), (COLOR_GREEN, Map.Stone)])
+        return TILES[Color]
+
+    def DrawTile(self,x,y,Tile):
+        self.window.blit(Tile, (x,y))
+
+
+    def GetMap(self):
+        map = Image.open("Graphics/Map.png")
+        return map.load(), map.size
+
+    def draw(self, PlayerX,PlayerY):
+        for x in range(self.mapSize[0]):
+            for y in range(self.mapSize[1]):
+                if self.pix[x,y][3] is not 0:
+                    self.DrawTile(x * TILE_SIZE - PlayerX, y * TILE_SIZE + PlayerY, Map.GetTileFromColor(self.pix[x,y]))
 
     def __init__(self, window):
         self.window = window
-
-        im = Image.open('Graphics/Map.png')
-        pix = im.load()
-        for x in range(im.size[0]):
-            for y in range(im.size[1]):
-                if pix[x,y][3] is not 0:
-                    if pix[x,y] in TILES:
-                        self.DrawTile(x * TILE_SIZE, y * TILE_SIZE, TILES[pix[x,y]])
-                    else:
-                        print("{} not defined".format(pix[x,y]))
+        self.pix, self.mapSize = self.GetMap()

@@ -1,3 +1,6 @@
+import pygame
+pygame.init()
+
 WINDOW_HEIGHT = 640
 WINDOW_WIDTH = 800
 
@@ -15,6 +18,9 @@ COLOR_BLUE = (0,0,255,255)
 DIRT = "Graphics/dirt.jpg"
 STONE = "Graphics/stone.jpg"
 WOOD = "Graphics/wood.jpg"
+SKY = "Graphics/sky.png"
+PLAYER = "Graphics/player.png"
 
-#COLOR TO TILE
-TILES = dict([(COLOR_RED, DIRT),(COLOR_BLUE,WOOD), (COLOR_GREEN, STONE)])
+
+#PLAYER
+PlayerSpeed = .1
