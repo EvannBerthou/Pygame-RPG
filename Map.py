@@ -6,8 +6,8 @@ pygame.init()
 
 class Pix:
     def __init__(self,x,y,TILE):
-        self.x = x * TILE_SIZE
-        self.y = y * TILE_SIZE
+        self.x = x
+        self.y = y
         self.tile = TILE
 
 class Map:
@@ -29,11 +29,17 @@ class Map:
     def DrawTile(self,x,y,Tile):
         self.window.blit(Tile, (x,y))
 
+    def GetTileAtCoord(self, x,y):
+        for pix in self.pix:
+            if pix.x is x and pix.y is y:
+                return True
+        return False
 
     def GetMap(self):
         map = Image.open("Graphics/Map.png")
         pix = map.load()
         Tiles = []
+
         for x in range(map.size[0]):
             for y in range(map.size[1]):
                 if pix[x,y][3] is not 0:
@@ -43,7 +49,7 @@ class Map:
 
     def draw(self, PlayerX,PlayerY):
         for tile in self.pix:
-            self.DrawTile(tile.x - PlayerX,tile.y,tile.tile)
+            self.DrawTile(tile.x * TILE_SIZE - PlayerX,tile.y * TILE_SIZE,tile.tile)
 
     def __init__(self, window):
         self.window = window

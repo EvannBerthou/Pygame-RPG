@@ -13,15 +13,16 @@ pygame.init()
 window = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pygame.HWSURFACE | pygame.DOUBLEBUF)
 
 sky = pygame.image.load(SKY)
+sky = pygame.transform.scale(sky, (1000,640))
 Sky = pygame.Surface(sky.get_size(), pygame.HWSURFACE)
 Sky.blit(sky, (0,0))
 del sky
 
 clock =  pygame.time.Clock()
-fps_font = pygame.font.SysFont("Arial", 20)
+fps_font = pygame.font.SysFont("Arial", 16)
 
 map = Map.Map(window)
-player = Player.Player(window)
+player = Player.Player(window, map)
 
 pygame.display.update()
 
