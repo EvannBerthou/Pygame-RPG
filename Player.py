@@ -43,6 +43,10 @@ class Player:
 
             Globals.window.blit(sprite,(x,self.y))
 
+            item = self.inventory.ItemsManager.CheckCollision()
+            if item is not None:
+                self.inventory.AddItem(item)
+
 
     def move(self, deltaTime,mapSize):
         if self.dead: #Move only if alive
@@ -50,6 +54,7 @@ class Player:
 
         self.health += deltaTime * RegenSpeed
         self.health = Clamp(self.health, 0, self.maxHealth)
+
         self.CanMoveLeft = not self.map.GetCollsionAt(int(self.x / TILE_SIZE + 25), int(self.y / TILE_SIZE))
         self.CanMoveRight = not self.map.GetCollsionAt(int(self.x / TILE_SIZE + 26), int(self.y / TILE_SIZE))
 
@@ -59,6 +64,7 @@ class Player:
         mapX = (mapSize[0] * TILE_SIZE) - (WINDOW_WIDTH / 2) - TILE_SIZE
 
         self.x = Clamp(self.x, -400, mapX)
+        Globals.playerX = self.x
 
         if not self.map.GetCollsionAt(int(self.x / TILE_SIZE + 25),int(self.y / TILE_SIZE + 1)):
             self.y += 1

@@ -6,6 +6,7 @@ pygame.init()
 
 class Globals:
     window = None
+    playerX = 0
 
 WINDOW_HEIGHT = 640
 WINDOW_WIDTH = 800

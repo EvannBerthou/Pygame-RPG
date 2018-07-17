@@ -11,6 +11,7 @@ class Pix:
         self.y = y
         self.tile = TILE
         self.collide = collide
+        self.item = None
 
     def ShouldShow(self, playerX, playerY):
         dist = (self.x * TILE_SIZE - playerX - WINDOW_WIDTH)**2
@@ -36,7 +37,7 @@ class Map:
 
     def GetCollsionAt(self, x,y):
         for pix in self.pix:
-            if pix.collide:
+            if pix.collide: #Si l'object a une collision
                 if pix.x is x and pix.y is y:
                     return True
         return False

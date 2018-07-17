@@ -2,7 +2,8 @@ from CONST import *
 import Map, Player
 
 def show_fps():
-    fps = int(clock.get_fps())
+
+    fps = Clamp(int(clock.get_fps()), 0, 60)
     fpsText = fps_font.render(str(fps), True, COLOR_GREEN)
     Globals.window.blit(fpsText,(0,0))
 
