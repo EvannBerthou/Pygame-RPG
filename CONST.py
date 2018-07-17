@@ -1,5 +1,11 @@
 import pygame
+from pygame.locals import *
 pygame.init()
+
+## TODO: MOVE ALL VARS IN GLOBALS
+
+class Globals:
+    window = None
 
 WINDOW_HEIGHT = 640
 WINDOW_WIDTH = 800
@@ -24,7 +30,8 @@ PLAYER_RIGHT = "Graphics/player_right.png"
 
 
 #PLAYER
-PlayerSpeed = .1
+PlayerSpeed = .15
+RegenSpeed = 1/32
 
 def Clamp(value, min, max):
     if value > max:
@@ -32,3 +39,11 @@ def Clamp(value, min, max):
     if value < min:
         value = min
     return value
+
+#KEYS
+KEY_LEFT = pygame.K_q
+KEY_RIGHT = pygame.K_d
+
+#FONTS
+fps_font = pygame.font.SysFont("Arial", 16)
+Damage_font = pygame.font.SysFont("monospace",18)

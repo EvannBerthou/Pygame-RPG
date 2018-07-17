@@ -1,16 +1,14 @@
-import pygame
-from pygame.locals import *
 from CONST import *
 import Map, Player
 
 def show_fps():
     fps = int(clock.get_fps())
     fpsText = fps_font.render(str(fps), True, COLOR_GREEN)
-    window.blit(fpsText,(0,0))
+    Globals.window.blit(fpsText,(0,0))
 
 
 pygame.init()
-window = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pygame.HWSURFACE | pygame.DOUBLEBUF)
+Globals.window = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pygame.HWSURFACE | pygame.DOUBLEBUF)
 
 sky = pygame.image.load(SKY)
 sky = pygame.transform.scale(sky, (1000,640))
@@ -19,10 +17,9 @@ Sky.blit(sky, (0,0))
 del sky
 
 clock =  pygame.time.Clock()
-fps_font = pygame.font.SysFont("Arial", 16)
 
-map = Map.Map(window)
-player = Player.Player(window, map)
+map = Map.Map(Globals.window)
+player = Player.Player(Globals.window, map)
 
 pygame.display.update()
 
@@ -36,14 +33,13 @@ while True:
 
         player.handle_event(event)
 
-    window.fill(COLOR_BLACK)
+    Globals.window.blit(Sky,(-50 - player.x / 8,0))
 
-    window.blit(Sky,(-50 - player.x / 8,0))
-
-    map.draw(player.x, 0)
+    map.draw(player.x)
 
     player.move(deltaTime, map.mapSize)
     player.draw()
+    player.inventory.draw()
 
     show_fps()
 
