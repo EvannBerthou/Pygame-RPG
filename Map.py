@@ -66,3 +66,4 @@ class Map:
 
         core = Core(self.mapSize[0] / 2 , WINDOW_HEIGHT / TILE_SIZE - 6) #Place the core in the center of the map
         self.pix.append(Pix(core.x, core.y, Map.Wood, False))
+        Globals.core = core

@@ -1,9 +1,10 @@
 from CONST import *
 import Map, Player
+from WaveManager import *
+import pygame
 
 def show_fps():
-
-    fps = Clamp(int(clock.get_fps()), 0, 60)
+    fps = Clamp(int(clock.get_fps()), 0, 600)
     fpsText = fps_font.render(str(fps), True, COLOR_GREEN)
     Globals.window.blit(fpsText,(0,0))
 
@@ -21,16 +22,21 @@ clock =  pygame.time.Clock()
 
 map = Map.Map(Globals.window)
 player = Player.Player(Globals.window, map)
+NewWave()
+
 
 pygame.display.update()
 
 while True:
-    deltaTime = clock.tick()
+    Globals.deltaTime = clock.tick()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_i:
+                NewWave()
 
         player.handle_event(event)
 
@@ -38,10 +44,14 @@ while True:
 
     map.draw(player.x)
 
-    player.move(deltaTime, map.mapSize)
+    player.move(map.mapSize)
     player.draw()
-    player.inventory.draw()
 
+    DrawEnnemies()
+
+    #UI RENDER
     show_fps()
+    player.inventory.draw()
+    DrawWave()
 
     pygame.display.update()

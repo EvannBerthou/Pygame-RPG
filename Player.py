@@ -48,18 +48,18 @@ class Player:
                 self.inventory.AddItem(item)
 
 
-    def move(self, deltaTime,mapSize):
+    def move(self,mapSize):
         if self.dead: #Move only if alive
             return
 
-        self.health += deltaTime * RegenSpeed
+        self.health += Globals.deltaTime * RegenSpeed
         self.health = Clamp(self.health, 0, self.maxHealth)
 
         self.CanMoveLeft = not self.map.GetCollsionAt(int(self.x / TILE_SIZE + 25), int(self.y / TILE_SIZE))
         self.CanMoveRight = not self.map.GetCollsionAt(int(self.x / TILE_SIZE + 26), int(self.y / TILE_SIZE))
 
         if (self.velocity is 1 and self.CanMoveRight) or (self.velocity is -1 and self.CanMoveLeft):
-            self.x += self.velocity * PlayerSpeed * deltaTime
+            self.x += self.velocity * PlayerSpeed * Globals.deltaTime
 
         mapX = (mapSize[0] * TILE_SIZE) - (WINDOW_WIDTH / 2) - TILE_SIZE
 
@@ -70,7 +70,7 @@ class Player:
             self.y += 1
 
         if self.CountDown > 0:
-            self.CountDown -= deltaTime
+            self.CountDown -= Globals.deltaTime
         else:
             self.CountDown = 0
             self.showDamage = False

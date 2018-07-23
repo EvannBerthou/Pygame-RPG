@@ -1,5 +1,7 @@
 import pygame
 from pygame.locals import *
+from math import hypot
+
 pygame.init()
 
 ## TODO: MOVE ALL VARS IN GLOBALS
@@ -7,6 +9,8 @@ pygame.init()
 class Globals:
     window = None
     playerX = 0
+    core = None
+    deltaTime = 0
 
 WINDOW_HEIGHT = 640
 WINDOW_WIDTH = 800
@@ -34,12 +38,17 @@ PLAYER_RIGHT = "Graphics/player_right.png"
 PlayerSpeed = .15
 RegenSpeed = 1/32
 
+#Functions
 def Clamp(value, min, max):
     if value > max:
         value = max
     if value < min:
         value = min
     return value
+
+def Distance(x1,y1,x2,y2):
+    return hypot(x2 - x1, y2 - y1)
+
 
 #KEYS
 KEY_LEFT = pygame.K_q
@@ -48,3 +57,4 @@ KEY_RIGHT = pygame.K_d
 #FONTS
 fps_font = pygame.font.SysFont("Arial", 16)
 Damage_font = pygame.font.SysFont("monospace",18)
+Wave_font = pygame.font.SysFont("monoscpace",22)
