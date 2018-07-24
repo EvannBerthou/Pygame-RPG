@@ -8,9 +8,13 @@ pygame.init()
 
 class Globals:
     window = None
-    playerX = 0
+    player = None
     core = None
+    
+    playerX = 0
+    playerY = 0
     deltaTime = 0
+    mapX = 0
 
 WINDOW_HEIGHT = 640
 WINDOW_WIDTH = 800
@@ -46,7 +50,7 @@ def Clamp(value, min, max):
         value = min
     return value
 
-def Distance(x1,y1,x2,y2):
+def Distance(x1,x2,y1,y2):
     return hypot(x2 - x1, y2 - y1)
 
 

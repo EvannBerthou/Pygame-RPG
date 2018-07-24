@@ -1,6 +1,8 @@
 from CONST import *
-import math
+import math, random
 from Ennemie import Ennemie
+from threading import Thread
+from time import sleep
 
 
 class Wave:
@@ -11,8 +13,21 @@ class Wave:
     def KillEnnemie(ennemie):
         Wave.Ennemies.remove(ennemie)
         Wave.ENNEMIES_LEFT -= 1
+        Globals.core.life -= ennemie.attack
         if Wave.ENNEMIES_LEFT is 0:
             NewWave()
+
+class WaveSpawner(Thread):
+    def __init__(self, ennmieCount):
+        Thread.__init__(self)
+        self.ennemieCount = ennmieCount
+    
+    def run(self):
+        for x in range(self.ennemieCount):
+            side = "LEFT" if random.randint(0,1) is 0 else "RIGHT"
+            x = 0 if side is "LEFT" else Globals.mapX
+            Wave.Ennemies.append(Ennemie(x,WINDOW_HEIGHT - 6 * TILE_SIZE, Globals.core,side))
+            sleep(random.uniform(0.5,2))    
 
 def DrawWave():
     textWave = Wave_font.render("Wave : {}".format(Wave.WAVE_COUNT), True, COLOR_WHITE)
@@ -27,9 +42,8 @@ def NewWave():
     Wave.WAVE_COUNT += 1
     ennemies_count = GetNextWaveCount()
 
-    ## TODO: ADD DELAY BETWEEN SPAWNS
-    for x in range(ennemies_count):
-        Wave.Ennemies.append(Ennemie(0,WINDOW_HEIGHT - 6 * TILE_SIZE, Globals.core,"LEFT"))
+    spawner = WaveSpawner(ennemies_count)
+    spawner.start()
 
     Wave.ENNEMIES_LEFT = ennemies_count
 
@@ -40,8 +54,3 @@ def DrawEnnemies():
     for e in Wave.Ennemies:
         e.Draw()
         e.Walk()
-
-def Kill(ennemie):
-    print("test")
-    Wave.Ennemies.remove(ennemie)
-    Wave.ENNEMIES_LEFT -= 1

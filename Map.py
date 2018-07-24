@@ -58,12 +58,15 @@ class Map:
         for tile in self.pix:
             if tile.ShouldShow(PlayerX, 0):
                 self.DrawTile(tile.x * TILE_SIZE - int(PlayerX),tile.y * TILE_SIZE,tile.tile)
+        Globals.core.DrawLife()
 
     def __init__(self, window):
         Globals.window = window
         self.pix,self.mapSize = self.GetMap()
-        self.draw(0)
-
+        Globals.mapX = self.mapSize[0] * TILE_SIZE
+        
         core = Core(self.mapSize[0] / 2 , WINDOW_HEIGHT / TILE_SIZE - 6) #Place the core in the center of the map
         self.pix.append(Pix(core.x, core.y, Map.Wood, False))
         Globals.core = core
+        Globals.core.x *= TILE_SIZE
+        Globals.core.y *= TILE_SIZE

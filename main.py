@@ -22,6 +22,7 @@ clock =  pygame.time.Clock()
 
 map = Map.Map(Globals.window)
 player = Player.Player(Globals.window, map)
+Globals.player = player
 NewWave()
 
 

@@ -8,12 +8,13 @@ class Player:
     Player_left = Map.LoadTexture(PLAYER_LEFT)
 
     def TakeDamage(self, damage):
-        if self.dead:
+        if self.dead or self.CountDownShowDamage > 0:
             return
         self.health -= damage
         self.DamageTaken = str(damage)
         self.showDamage = True
-        self.CountDown = 1 * 1000
+        self.CountDownShowDamage = 1000
+        self.CountDownRegen = 4000
         if self.health <= 0:
             print("Dead")
             self.dead = True
@@ -52,8 +53,9 @@ class Player:
         if self.dead: #Move only if alive
             return
 
-        self.health += Globals.deltaTime * RegenSpeed
-        self.health = Clamp(self.health, 0, self.maxHealth)
+        if self.CountDownRegen is 0:
+            self.health += Globals.deltaTime * RegenSpeed
+            self.health = Clamp(self.health, 0, self.maxHealth)
 
         self.CanMoveLeft = not self.map.GetCollsionAt(int(self.x / TILE_SIZE + 25), int(self.y / TILE_SIZE))
         self.CanMoveRight = not self.map.GetCollsionAt(int(self.x / TILE_SIZE + 26), int(self.y / TILE_SIZE))
@@ -65,15 +67,20 @@ class Player:
 
         self.x = Clamp(self.x, -400, mapX)
         Globals.playerX = self.x
+        Globals.playerY = self.y
 
         if not self.map.GetCollsionAt(int(self.x / TILE_SIZE + 25),int(self.y / TILE_SIZE + 1)):
             self.y += 1
 
-        if self.CountDown > 0:
-            self.CountDown -= Globals.deltaTime
+        if self.CountDownShowDamage > 0:
+            self.CountDownShowDamage -= Globals.deltaTime
         else:
-            self.CountDown = 0
+            self.CountDownShowDamage = 0
             self.showDamage = False
+
+        if self.CountDownRegen > 0:
+            self.CountDownRegen -= Globals.deltaTime
+            self.CountDownRegen = Clamp(self.CountDownRegen, 0, 5000)
 
     def handle_event(self,event):
         keys = pygame.key.get_pressed()
@@ -107,7 +114,8 @@ class Player:
 
         self.showDamage = False
         self.DamageTaken = ""
-        self.CountDown = 0
+        self.CountDownShowDamage = 0
+        self.CountDownRegen = 0
 
         self.lastSprite = Player.Player_left
 
