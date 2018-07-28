@@ -4,8 +4,6 @@ from math import hypot
 
 pygame.init()
 
-## TODO: MOVE ALL VARS IN GLOBALS
-
 class Globals:
     window = None
     player = None
@@ -59,6 +57,8 @@ KEY_LEFT = pygame.K_q
 KEY_RIGHT = pygame.K_d
 
 #FONTS
+Default_font = pygame.font.get_default_font()
 fps_font = pygame.font.SysFont("Arial", 16)
-Damage_font = pygame.font.SysFont("monospace",18)
-Wave_font = pygame.font.SysFont("monoscpace",22)
+NewWave_font = pygame.font.SysFont("Arial",20, bold=True)
+Damage_font = pygame.font.SysFont(Default_font,26)
+Wave_font = pygame.font.SysFont(Default_font,22)

@@ -1,6 +1,8 @@
 from CONST import *
 from Map import *
 from UI import *
+from Inventory import *
+import WaveManager
 
 class Player:
 
@@ -84,6 +86,8 @@ class Player:
 
     def handle_event(self,event):
         keys = pygame.key.get_pressed()
+        
+        #ON KEY PRESSED
         if event.type is pygame.KEYDOWN:
             if self.velocity is 0:
                 if keys[KEY_LEFT]:
@@ -93,12 +97,23 @@ class Player:
             if event.key == pygame.K_r:
                 self.TakeDamage(50)
 
-        if event.type == pygame.KEYUP:
+        #ON KEY RELEASED
+        if event.type is pygame.KEYUP:
             if self.velocity is 1 and event.key is KEY_RIGHT:
                 self.velocity = 0
             if self.velocity is -1 and event.key is KEY_LEFT:
                 self.velocity = 0
+        
+        #ON MOUSE BUTTON CLICK
+        if event.type is pygame.MOUSEBUTTONDOWN:
+            if pygame.mouse.get_pressed()[0]: #LEFT CLICK
+                    x = pygame.mouse.get_pos()[0] + int(Globals.playerX)
+                    y = pygame.mouse.get_pos()[1] + int(Globals.playerY / TILE_SIZE - TILE_SIZE * 2)
+                    self.Shoot(x,y)
 
+    def Shoot(self,x,y):
+        for e in WaveManager.Wave.Ennemies:
+            e.IsShooted(x,y,self.attack)
 
     def __init__(self, window, map):
         self.x = 0
@@ -123,5 +138,7 @@ class Player:
         self.CanMoveRight = True
 
         self.inventory = Inventory(5)
+
+        self.attack = 25
 
         self.draw()
