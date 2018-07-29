@@ -23,6 +23,9 @@ class Player:
 
     def draw(self):
         DrawPlayerLife(self.health, self.maxHealth)
+        if self.ActiveWeapon is not None:
+            self.ActiveWeapon.draw()   
+
 
         #Draw taken damages
         if self.showDamage and not self.dead:
@@ -94,8 +97,11 @@ class Player:
                     self.velocity = -1
                 if keys[KEY_RIGHT]:
                     self.velocity = 1
-            if event.key == pygame.K_r:
-                self.TakeDamage(50)
+
+            if event.key == pygame.K_r and self.ActiveWeapon is not None:
+                self.ActiveWeapon.reload()
+
+            self.ActiveWeapon = self.inventory.GetItem(chr(event.key), self.ActiveWeapon)
 
         #ON KEY RELEASED
         if event.type is pygame.KEYUP:
@@ -109,9 +115,14 @@ class Player:
             if pygame.mouse.get_pressed()[0]: #LEFT CLICK
                     x = pygame.mouse.get_pos()[0] + int(Globals.playerX)
                     y = pygame.mouse.get_pos()[1] + int(Globals.playerY / TILE_SIZE - TILE_SIZE * 2)
-                    self.Shoot(x,y)
+                    if self.ActiveWeapon is not None:
+                        if self.ActiveWeapon.ammo > 0:
+                            self.Shoot(x,y)
+                        else:
+                            self.ActiveWeapon.reload()
 
     def Shoot(self,x,y):
+        self.ActiveWeapon.ammo -= 1
         for e in WaveManager.Wave.Ennemies:
             e.IsShooted(x,y,self.attack)
 
@@ -140,5 +151,6 @@ class Player:
         self.inventory = Inventory(5)
 
         self.attack = 25
+        self.ActiveWeapon = None
 
         self.draw()

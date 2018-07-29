@@ -15,7 +15,7 @@ class Ennemie: #Base class for all ennemies
         #CHECK COLLISION WITH CORE
         distanceCore = Distance(self.x, self.core.x, 0,0)
         if distanceCore <= TILE_SIZE:
-            Globals.core.life -= ennemie.attack
+            Globals.core.life -= self.attack
             WaveManager.Wave.KillEnnemie(self)
             return
 

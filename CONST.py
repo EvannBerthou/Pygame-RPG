@@ -60,5 +60,8 @@ KEY_RIGHT = pygame.K_d
 Default_font = pygame.font.get_default_font()
 fps_font = pygame.font.SysFont("Arial", 16)
 NewWave_font = pygame.font.SysFont("Arial",20, bold=True)
+
 Damage_font = pygame.font.SysFont(Default_font,26)
 Wave_font = pygame.font.SysFont(Default_font,22)
+
+Ammo_font = pygame.font.SysFont("monospace", 16)
