@@ -11,7 +11,7 @@ class Weapon:
         self.reloadCooldown = 0
     
     def draw(self): #DRAW AMMO
-        string = "{} / {}".format(self.ammo, self.maxAmmo)
+        string = "{}/{}".format(self.ammo, self.maxAmmo)
         text = Ammo_font.render(string,1, COLOR_WHITE)
         x = WINDOW_WIDTH - text.get_width()
         y = WINDOW_HEIGHT - text.get_height()
