@@ -18,14 +18,25 @@ class Player:
         self.CountDownShowDamage = 1000
         self.CountDownRegen = 4000
         if self.health <= 0:
-            print("Dead")
             self.dead = True
 
-    def draw(self):
-        DrawPlayerLife(self.health, self.maxHealth)
-        if self.ActiveWeapon is not None:
-            self.ActiveWeapon.draw()   
+    def DrawPlayerLife(self):
+        #DRAW HEALTH
+        pygame.draw.rect(Globals.window, COLOR_WHITE, (20,10,100,10), 1)
+        life = Clamp(self.health,0,self.maxHealth)
+        if life > 0:
+            healthRatio = life / self.maxHealth
+            pygame.draw.rect(Globals.window, COLOR_GREEN, (21,11, int(98 * healthRatio), 8))
 
+    def draw(self):
+        if self.CountDownRegen is 0:
+            self.health += Globals.deltaTime * RegenSpeed
+            self.health = Clamp(self.health, 0, self.maxHealth)
+
+        self.DrawPlayerLife()
+
+        if self.ActiveWeapon is not None:
+            self.ActiveWeapon.draw()
 
         #Draw taken damages
         if self.showDamage and not self.dead:
@@ -54,27 +65,22 @@ class Player:
                 self.inventory.AddItem(item)
 
 
-    def move(self,mapSize):
+    def move(self):
         if self.dead: #Move only if alive
             return
 
-        if self.CountDownRegen is 0:
-            self.health += Globals.deltaTime * RegenSpeed
-            self.health = Clamp(self.health, 0, self.maxHealth)
 
-        self.CanMoveLeft = not self.map.GetCollsionAt(int(self.x / TILE_SIZE + 25), int(self.y / TILE_SIZE))
-        self.CanMoveRight = not self.map.GetCollsionAt(int(self.x / TILE_SIZE + 26), int(self.y / TILE_SIZE))
+        self.CanMoveLeft = not Globals.map.GetCollsionAt(int(self.x / TILE_SIZE + 25), int(self.y / TILE_SIZE))
+        self.CanMoveRight = not Globals.map.GetCollsionAt(int(self.x / TILE_SIZE + 26), int(self.y / TILE_SIZE))
 
         if (self.velocity is 1 and self.CanMoveRight) or (self.velocity is -1 and self.CanMoveLeft):
             self.x += self.velocity * PlayerSpeed * Globals.deltaTime
 
-        mapX = (mapSize[0] * TILE_SIZE) - (WINDOW_WIDTH / 2) - TILE_SIZE
-
-        self.x = Clamp(self.x, -400, mapX)
+        self.x = Clamp(self.x, -400, Globals.mapX)
         Globals.playerX = self.x
         Globals.playerY = self.y
 
-        if not self.map.GetCollsionAt(int(self.x / TILE_SIZE + 25),int(self.y / TILE_SIZE + 1)):
+        if not Globals.map.GetCollsionAt(int(self.x / TILE_SIZE + 25),int(self.y / TILE_SIZE + 1)):
             self.y += 1
 
         if self.CountDownShowDamage > 0:
@@ -89,7 +95,7 @@ class Player:
 
     def handle_event(self,event):
         keys = pygame.key.get_pressed()
-        
+
         #ON KEY PRESSED
         if event.type is pygame.KEYDOWN:
             if self.velocity is 0:
@@ -109,7 +115,7 @@ class Player:
                 self.velocity = 0
             if self.velocity is -1 and event.key is KEY_LEFT:
                 self.velocity = 0
-        
+
         #ON MOUSE BUTTON CLICK
         if event.type is pygame.MOUSEBUTTONDOWN:
             if pygame.mouse.get_pressed()[0]: #LEFT CLICK

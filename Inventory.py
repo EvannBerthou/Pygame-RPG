@@ -45,7 +45,7 @@ class Inventory:
         if key is "(" and self.cases[4] is not None:
             self.active = 4
             return self.cases[4].item
-            
+
         return currentActive
 
 class InventoryCase:

@@ -8,7 +8,8 @@ class Globals:
     window = None
     player = None
     core = None
-    
+    map = None
+
     playerX = 0
     playerY = 0
     deltaTime = 0
@@ -53,7 +54,7 @@ def Distance(x1,x2,y1,y2):
 
 
 #KEYS
-KEY_LEFT = pygame.K_q
+KEY_LEFT = pygame.K_a
 KEY_RIGHT = pygame.K_d
 
 #FONTS
@@ -64,4 +65,4 @@ NewWave_font = pygame.font.SysFont("Arial",20, bold=True)
 Damage_font = pygame.font.SysFont(Default_font,26)
 Wave_font = pygame.font.SysFont(Default_font,22)
 
-Ammo_font = pygame.font.SysFont("monospace", 16)
+Ammo_font = pygame.font.SysFont("Arial", 18)

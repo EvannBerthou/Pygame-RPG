@@ -16,8 +16,7 @@ def handle_events():
             if event.key == pygame.K_i:
                 NewWave()
 
-        player.handle_event(event)
-
+        Globals.player.handle_event(event)
 
 pygame.init()
 Globals.window = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pygame.HWSURFACE | pygame.DOUBLEBUF)
@@ -31,12 +30,11 @@ del sky
 
 clock =  pygame.time.Clock()
 
-map = Map.Map(Globals.window)
-player = Player.Player(Globals.window, map)
-Globals.player = player
+Globals.map = Map.Map(Globals.window)
+Globals.player = Player.Player(Globals.window, map)
 NewWave()
-
-pygame.display.update()
+#
+# pygame.display.update()
 
 while True:
     Globals.deltaTime = clock.tick(60)
@@ -49,14 +47,14 @@ while True:
     handle_events()
 
     #MAP RENDER
-    Globals.window.blit(Sky,(-50 - player.x / 8,0))
-    map.draw(player.x)
-    player.move(map.mapSize)
-    player.draw()
+    Globals.window.blit(Sky,(-50 - Globals.player.x / 8,0))
+    Globals.map.draw()
+    Globals.player.move()
+    Globals.player.draw()
     DrawEnnemies()
 
-    #UI RENDER    
-    player.inventory.draw()
+    #UI RENDER
+    Globals.player.inventory.draw()
     DrawWave()
 
     pygame.display.update()
